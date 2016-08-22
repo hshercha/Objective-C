@@ -15,6 +15,7 @@
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSArray *listings;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -23,6 +24,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [[AirAPI sharedInstance] getListing:^(NSArray *values, NSError *error) {
@@ -48,11 +51,19 @@
 - (UITableViewCell*)tableView:(UITableView *)tableView
         cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    ListingCell *viewCell = [tableView dequeueReusableCellWithIdentifier:@"ListingCell" forIndexPath:indexPath];
+    ListingCell *viewCell = [tableView dequeueReusableCellWithIdentifier:@"ListingCell"];
     
     SearchResult *result = (SearchResult*)_listings[indexPath.row];
     viewCell.nameLabel.text = result.listing.name;
+    
+    if (result.listing.neighborhood == nil)
+    {
+    viewCell.descriptionLabel.text = [NSString stringWithFormat:@"%@", result.listing.roomType];
+    }
+    else
+    {
     viewCell.descriptionLabel.text = [NSString stringWithFormat:@"%@ - %@", result.listing.neighborhood, result.listing.roomType];
+    }
     
     return viewCell;
 }
