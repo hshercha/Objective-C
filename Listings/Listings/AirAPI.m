@@ -88,7 +88,7 @@
                                   @"user_lat"  : USER_LAT,
                                   @"user_lng"  : USER_LONG};
     
-    //Call the object mamanger with the appropriate parameters
+    //Call the object manager with the appropriate parameters
     [[RKObjectManager sharedManager] getObjectsAtPath:@"/v2/search_results"
                                            parameters:queryParams
                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
